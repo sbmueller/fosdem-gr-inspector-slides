@@ -4,10 +4,10 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>gr-inspector</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+		<link rel="stylesheet" href="css/theme/league.css">
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -24,8 +24,158 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section>
+					<h1>gr-inspector</h1>
+					<h3>A Signal Analysis Toolbox for GNU Radio</h3>
+					<img src="figures/logo_body_big.png" style="background:none; border:none; box-shadow:none;">
+				</section>
+				<!-- <section>
+					<h3>What is signal intelligence?</h3>
+					<blockquote cite="https://en.wikipedia.org/wiki/Signals_intelligence">SIGINT is intelligence-gathering by interception of signals</blockquote>
+					- Wikipedia
+				</section> -->
+				<section>
+					<h3>Motivation of automated signal analysis</h3>
+					<ul>
+						<li class="fragment">Spectrum Monitoring</li>
+						<li class="fragment">Explore real-world signals</li>
+						<li class="fragment">Easy access for beginners</li>
+						<li class="fragment">Live demodulation</li>
+						<li class="fragment">Batch processing of signals</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Tasks of receiving unknown signals</h3>
+					<ul>
+						<li class="fragment">Detect</li>
+						<li class="fragment">Mix down</li>
+						<li class="fragment">Filter</li>
+						<li class="fragment">Analyse</li>
+						<li class="fragment">Demodulate</li>
+						<li class="fragment">Decrypt</li>
+					</ul>
+				</section>
+				<section>
+				  <h3>Typical workflow before</h3>
+					<ul>
+						<li class="fragment">Use GNU Radio to receive signal<br />
+						<img src="figures/fg_before.png" style="width: 80%; margin-left:auto; margin-right:auto;" align="center"/></li>
+						<li class="fragment">Analyse signal with signal processing tools (Scipy/Inspectrum/MATLAB)</li>
+						<li class="fragment">Estimate necessary parameters for demodulation</li>
+						<li class="fragment">Demodulate with GNU Radio or other tools</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Workflow characterized by</h3>
+					<ul>
+						<li class="fragment">Stop and adjust flowgraph several times</li>
+						<li class="fragment">Rule-of-thumb estimate of parameters</li>
+						<li class="fragment">Real-time analysis hardly possible</li>
+						<li class="fragment">User needs much expertise to perform steps</li>
+					</ul>
+				</section>
+				<section>
+					This is where the inspector comes in!
+				</section>
+				<section>
+					<h3>Signal Detection</h3>
+					<img src="figures/signal_detector.png" style="width: 30%;"/>
+					<ul>
+						<li class="fragment">Performs energy detection on one or more signals</li>
+						<li class="fragment">Set threshold or use auto threshold</li>
+						<li class="fragment">Surpress narrow signals (false detections)</li>
+						<li class="fragment">Outputs estimated PSD and map of signal frequencies/bandwidths</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Visualisazion</h3>
+					<img src="figures/qt_gui_inspector_sink.png" style="width: 30%;"/>
+					<ul>
+						<li class="fragment">Plots PSD estimate from signal detector</li>
+						<li class="fragment">Shows signal boundries</li>
+						<li class="fragment">Prints signal properties and analysis results</li>
+						<li class="fragment">Enables manual selection of signals</li>
+					</ul>
+				</section>
+				<section>
+					<img src="figures/gui.png" style="width: 100%;"/>
+				</section>
+				<section>
+					<h3>Separation of signals</h3>
+					<img src="figures/signal_separator.png" style="width: 30%;"/>
+					<ul>
+						<li class="fragment">Mixing, Filtering, Decimating</li>
+						<li class="fragment">FIR filter for every detected signal</li>
+						<li class="fragment">Calculates filter taps or uses precalculated JSON file</li>
+						<li class="fragment">Outputs lists of signal parameters and samples</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Custom processing of signals</h3>
+					<img src="figures/signal_extractor.png" style="width: 30%;"/>
+					<ul>
+						<li class="fragment">Picks one signal from separator list</li>
+						<li class="fragment">Passes it as complex stream for most GR blocks</li>
+						<li class="fragment">Resampling possible</li>
+					</ul>
+				</section>
+				<section>
+					<h3>OFDM parameter estimation</h3>
+					<img src="figures/ofdm_estimator.png" style="width: 30%;"/>
+					<ul>
+						<li class="fragment">Estimation of
+						<ul>
+							<li>Subcarrier spacing</li>
+							<li>Symbol time</li>
+							<li>Subcarrier number</li>
+							<li>Cyclic prefix length</li>
+						</ul></li>
+						<li class="fragment">Can be fed back to QT GUI Inspector Sink</li>
+					</ul>
+				</section>
+				<section>
+					<h3>OFDM Synchronization</h3>
+					<img src="figures/ofdm_synchronizer.png" style="width: 30%;"/>
+					<ul>
+						<li class="fragment">Performs frequency and timing synchronization</li>
+				</section>
+				<section>
+					<h3>Modulation Classification</h3>
+					<img src="figures/amc.png" style="width: 30%;"/>
+					<ul>
+						<li>Estimates modulation type of single carrier signals</li>
+						<li>Developed by Christopher Richardson</li>
+				</section>
+				<section>
+					<pre>
+					<code data-trim data-noescape>
+				-
+				-----------
+				< Demotime! >
+				-----------
+				       \   ^__^
+				        \  (oo)\_______
+				           (__)\       )\/\
+				               ||----w |
+				               ||     ||
+					</code></pre>
+				</section>
+				<section>
+					<h3>Thank you!</h3>
+					<ul>
+						<li>gr-inspector was a Google Summer of Code project 2016</li>
+						<li>Made possible by the great mentors
+							<ul>
+								<li>Sreeraj Rajendran</li>
+								<li>Sebastian Koslowski</li>
+							</ul>
+						</li>
+						<li>and with support of the Communications Engineering Lab of the KIT Karlsruhe, the GNU Radio community and Google's generous sponsoring</li>
+					</ul>
+					<img src="figures/gsoc.png" width="150px">
+					<img src="figures/cel.png" width="150px">
+					<img src="figures/gr.png" width="150px">
+				</section>
 			</div>
 		</div>
 
